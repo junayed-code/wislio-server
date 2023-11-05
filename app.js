@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "./mongoose/init.js"; // Initialize mongoose
 import express from "express";
 
 const { PORT = 4040 } = process.env;
