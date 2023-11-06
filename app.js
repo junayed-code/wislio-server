@@ -7,6 +7,7 @@ import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/notFound.js";
 import CategoriesRoute from "./routes/categories.js";
 import decodeCookieKey from "./middlewares/decodeCookieKey.js";
+import AuthRoute from "./routes/auth.js";
 
 const { PORT = 4040 } = process.env;
 
@@ -24,9 +25,11 @@ app.use(express.json());
 app.use(cors({ origin: [], credentials: true }));
 
 // Router middlewares
+app.use(AuthRoute);
 app.use("/categories", CategoriesRoute);
 
 app.get("/", (req, res, next) => {
+  console.log(req.cookies);
   res.send({ status: "success", name: "Wislio" });
 });
 
