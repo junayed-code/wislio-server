@@ -2,14 +2,20 @@ import "dotenv/config";
 import "./mongoose/init.js"; // Initialize mongoose
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.js";
 import notFound from "./middlewares/notFound.js";
 import CategoriesRoute from "./routes/categories.js";
+import decodeCookieKey from "./middlewares/decodeCookieKey.js";
 
 const { PORT = 4040 } = process.env;
 
 // Initialize express app
 const app = express();
+
+// Cookies parser middleware
+app.use(cookieParser());
+app.use(decodeCookieKey);
 
 // JSON content parser middleware
 app.use(express.json());
