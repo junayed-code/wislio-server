@@ -5,6 +5,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import AuthRoute from "./routes/auth.js";
 import CategoriesRoute from "./routes/categories.js";
+import BooksRoute from "./routes/books.js";
+import BorrowedBooksRoute from "./routes/borrowedBooks.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import decodeCookieKey from "./middlewares/decodeCookieKey.js";
@@ -31,6 +33,8 @@ app.use(verifyingUser());
 
 // Router middlewares
 app.use(AuthRoute);
+app.use("/books", BooksRoute);
+app.use("/borrowedbooks", BorrowedBooksRoute);
 app.use("/categories", protectedRoute, CategoriesRoute);
 
 app.get("/", (_req, res, _next) => {
