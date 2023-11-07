@@ -11,9 +11,7 @@ export const registerUser = async (req, res, next) => {
     if (!email) throw createError(400, "The user email is required");
 
     // Check if the user is already registered
-    const isUser = await User.findOne({
-      email: { $regex: email, $options: "i" },
-    });
+    const isUser = await User.findOne({ email });
     if (isUser) {
       throw createError(
         400,
@@ -39,9 +37,7 @@ export const loginUser = async (req, res, next) => {
     if (!req.body?.email) throw createError(400, "The user email is required");
 
     // Check if the user has registered
-    const user = await User.findOne({
-      email: { $regex: req.body?.email, $options: "i" },
-    });
+    const user = await User.findOne({ email: req.body?.email });
     if (!user) throw createError(401, "Unauthorized user");
     const { email, role } = user;
 
