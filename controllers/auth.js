@@ -85,8 +85,17 @@ export const logoutUser = async (req, res, next) => {
       "_" + Buffer.from("jwt_refresh_token").toString("base64url");
 
     res
-      .clearCookie(tokenCookieKey)
-      .clearCookie(refreshTokenCookieKey, { path: "/refresh-token" })
+      .clearCookie(tokenCookieKey, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .clearCookie(refreshTokenCookieKey, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/refresh-token",
+      })
       .status(204)
       .send();
   } catch (error) {}
