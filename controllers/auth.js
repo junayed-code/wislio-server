@@ -77,6 +77,21 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
+export const logoutUser = async (req, res, next) => {
+  try {
+    const tokenCookieKey =
+      "_" + Buffer.from("jwt_access_token").toString("base64url");
+    const refreshTokenCookieKey =
+      "_" + Buffer.from("jwt_refresh_token").toString("base64url");
+
+    res
+      .clearCookie(tokenCookieKey)
+      .clearCookie(refreshTokenCookieKey, { path: "/refresh-token" })
+      .status(204)
+      .send();
+  } catch (error) {}
+};
+
 export const refreshAccessToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
@@ -91,7 +106,7 @@ export const refreshAccessToken = async (req, res, next) => {
     }
 
     const { email, role } = playload;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }, { _id: 0, __v: 0 });
     if (!user) throw createError(401, "Unauthorized user");
 
     // Create access token
@@ -107,7 +122,7 @@ export const refreshAccessToken = async (req, res, next) => {
         maxAge: 900_000, // 15 minutes
       })
       .status(200)
-      .send({ status: "success", data: { accessToken } });
+      .send({ status: "success", data: { accessToken, user } });
   } catch (err) {
     next(err);
   }
